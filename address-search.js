@@ -100,7 +100,6 @@ class AddressSearch{
                         //onPredict callbacks
                         for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
                     }else{
-                        console.log(status);
                         if(status == 'ZERO_RESULTS'){
                             let li = document.createElement('li');
                             li.classList.add('empty-results');
@@ -108,6 +107,8 @@ class AddressSearch{
                             this._predictions.appendChild(li);
 
                             this._typeahead.value = '';
+                        }else{
+                            console.log(status);
                         }
                     }
                 });
