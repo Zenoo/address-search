@@ -82,6 +82,8 @@ class AddressSearch{
                     }else{
                         this._typeahead.value = '';
                     }
+
+                    for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
                 }else{
                     this._fetchPredictions.getPlacePredictions({ input: this._input.value }, (predictions, status) => {
                         this._resetPredictions();
