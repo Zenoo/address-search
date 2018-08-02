@@ -27,6 +27,9 @@ class AddressSearch{
         this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
 
         /** @private */
+        this._economizer = {};
+
+        /** @private */
         this._onSelect = [];
         /** @private */
         this._onPredict = [];
@@ -70,50 +73,64 @@ class AddressSearch{
         this._input.addEventListener('input',() => {
             if(this._input.value.length){
                 this._input.value = this._capitalize(this._input.value);
-                this._fetchPredictions.getPlacePredictions({ input: this._input.value }, (predictions, status) => {
-                    this._resetPredictions();
 
-                    if(status == google.maps.places.PlacesServiceStatus.OK){
-                        for(let prediction of predictions){
-                            let li = document.createElement('li');
-                            li.setAttribute('data-place-id', prediction.place_id);
+                if(this._economizer[this._input.value]){
+                    this._predictions.innerHTML = this._economizer[this._input.value];
 
-                            let mainText = document.createElement('span');
-                            mainText.innerText = prediction.structured_formatting.main_text;
-                            li.appendChild(mainText);
-
-                            if(prediction.structured_formatting.secondary_text){
-                                let secondaryText = document.createElement('span');
-                                secondaryText.innerText = prediction.structured_formatting.secondary_text;
-                                li.appendChild(secondaryText);
-                            }
-
-                            this._predictions.appendChild(li);
-                        }
-
-                        if(this._capitalize(predictions[0].description.substring(0, predictions[0].matched_substrings[0].length)) == this._input.value){
-                            this._typeahead.value = this._capitalize(predictions[0].description);
-                        }else{
-                            this._typeahead.value = '';
-                        }
-
-                        this._togglePredictions('on');
-
-                        //onPredict callbacks
-                        for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
+                    if(this._predictions.firstElementChild.getAttribute('data-place-description').startsWith(this._input.value)){
+                        this._typeahead.value = this._predictions.firstElementChild.getAttribute('data-place-description');
                     }else{
-                        if(status == 'ZERO_RESULTS'){
-                            let li = document.createElement('li');
-                            li.classList.add('empty-results');
-                            li.innerText = 'No address found';
-                            this._predictions.appendChild(li);
-
-                            this._typeahead.value = '';
-                        }else{
-                            console.log(status);
-                        }
+                        this._typeahead.value = '';
                     }
-                });
+                }else{
+                    this._fetchPredictions.getPlacePredictions({ input: this._input.value }, (predictions, status) => {
+                        this._resetPredictions();
+    
+                        if(status == google.maps.places.PlacesServiceStatus.OK){
+                            for(let prediction of predictions){
+                                let li = document.createElement('li');
+                                li.setAttribute('data-place-id', prediction.place_id);
+                                li.setAttribute('data-place-description', this._capitalize(prediction.description).replace(/"/g,"'"));
+    
+                                let mainText = document.createElement('span');
+                                mainText.innerText = prediction.structured_formatting.main_text;
+                                li.appendChild(mainText);
+    
+                                if(prediction.structured_formatting.secondary_text){
+                                    let secondaryText = document.createElement('span');
+                                    secondaryText.innerText = prediction.structured_formatting.secondary_text;
+                                    li.appendChild(secondaryText);
+                                }
+    
+                                this._predictions.appendChild(li);
+                            }
+    
+                            this._economizer[this._input.value] = this._predictions.innerHTML;
+    
+                            if(this._capitalize(predictions[0].description.substring(0, predictions[0].matched_substrings[0].length)) == this._input.value){
+                                this._typeahead.value = this._capitalize(predictions[0].description);
+                            }else{
+                                this._typeahead.value = '';
+                            }
+    
+                            this._togglePredictions('on');
+    
+                            //onPredict callbacks
+                            for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
+                        }else{
+                            if(status == 'ZERO_RESULTS'){
+                                let li = document.createElement('li');
+                                li.classList.add('empty-results');
+                                li.innerText = 'No address found';
+                                this._predictions.appendChild(li);
+    
+                                this._typeahead.value = '';
+                            }else{
+                                console.log(status);
+                            }
+                        }
+                    });
+                }
             }else{
                 this._typeahead.value = '';
                 this._togglePredictions('off');
