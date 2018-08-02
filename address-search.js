@@ -84,7 +84,7 @@ class AddressSearch{
                     }
 
                     this._togglePredictions('on');
-                    
+
                     for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
                 }else{
                     this._fetchPredictions.getPlacePredictions({ input: this._input.value }, (predictions, status) => {
@@ -161,6 +161,12 @@ class AddressSearch{
                     this._togglePredictions('off');
                 },1);
             }
+
+            let inputName = this._input.getAttribute('data-name')
+            if(inputName){
+                this._input.setAttribute('name',inputName);
+                this._input.removeAttribute('data-name');
+            }
         });
 
         this._predictions.addEventListener('mousedown', e => {
@@ -173,6 +179,15 @@ class AddressSearch{
             if(e.target && (e.target.nodeName == 'LI' || e.target.nodeName == 'SPAN')){
                 let li = e.target.closest('li');
                 this._select(li.getAttribute('data-place-id'))
+            }
+        });
+
+        //AUTOCOMPLETE HIDING HACK
+        this._input.addEventListener('focus', e => {
+            let inputName = this._input.getAttribute('name')
+            if(inputName){
+                this._input.setAttribute('data-name',inputName);
+                this._input.removeAttribute('name');
             }
         });
     }
