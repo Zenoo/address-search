@@ -1,0 +1,47 @@
+.address-search{
+    position: relative;
+    display: inline-block;
+
+    .address-search-typeahead{
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        color: fade(black,40%);
+        border: 1px solid #a9a9a9;
+        padding: 2px 5px;
+    }
+
+    .address-search-input{
+        position: relative;
+        z-index: 2;
+        background: none;
+        border: 1px solid #a9a9a9;
+        padding: 2px 5px;
+    }
+
+    .address-search-predictions{
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin: 0;
+        padding: 0;
+        border: 1px solid #a9a9a9;
+        background: white;
+        min-width: calc(~"100% - 2px");
+        
+        &.shown,&.clicked{
+            display: block;
+        }
+
+        li{
+            padding: 2px 5px;
+            cursor: pointer;
+
+            &:hover{
+                background: fade(black,5%);
+            }
+        }
+    }
+}

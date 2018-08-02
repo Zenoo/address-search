@@ -26,9 +26,37 @@ let address = new AddressSearch(element, options);
 ```
 * **Options**
 
+You can automatically fill inputs with address informations when the user selects an address.  
+To do that, simply add the information type you want and the selector for the input to fill.
+
+
+The `options` object works as follows
+```
+// GET THE COMPONENT FULL NAME
+typename : 'targetInput[selector]'
+// GET THE COMPONENT SHORT NAME
+typename_short : 'targetInput[selector]'
+```
+
+Available components:
 ```
 {
-  //TODO
+  street_address: '...',
+  route: '...',
+  country: '...',
+  administrative_area_level_1: '...',administrative_area_level_1: '...',
+  administrative_area_level_2: '...',
+  administrative_area_level_3: '...',
+  administrative_area_level_4: '...',
+  administrative_area_level_5: '...',
+  colloquial_area: '...',
+  locality: '...',
+  sublocality: '...',
+  neighborhood: '...',
+  premise: '...',
+  subpremise: '...',
+  postal_code: '...',
+  point_of_interest: '...'
 }
 ```
 * **Methods**
