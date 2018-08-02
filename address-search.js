@@ -219,7 +219,10 @@ class AddressSearch{
      * @private
      */
     _getPlaceComponent(component,isShort){
-        return isShort ? this.value.address_components.filter(c => c.types.includes(component))[0].short_name : this.value.address_components.filter(c => c.types.includes(component))[0].long_name;
+        let target = this.value.address_components.filter(c => c.types.includes(component));
+        if(target){
+            return isShort ? target[0].short_name : target[0].long_name
+        }else return '';
     }
 
     /**
