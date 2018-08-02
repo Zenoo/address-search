@@ -314,6 +314,7 @@ class AddressSearch{
 
     /**
      * Removes any AddressSearch mutation from the DOM
+     * @static
      */
     static destroy(selector){
         let element = document.querySelector(selector);

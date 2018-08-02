@@ -37,6 +37,10 @@
   padding: 2px 5px;
   cursor: pointer;
 }
+.address-search .address-search-predictions li > span:last-of-type {
+  font-size: 12px;
+  padding-left: 5px;
+}
 .address-search .address-search-predictions li:hover {
   background: rgba(0, 0, 0, 0.05);
 }
