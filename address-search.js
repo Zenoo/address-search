@@ -317,6 +317,7 @@ class AddressSearch{
 
     /**
      * Removes any AddressSearch mutation from the DOM
+     * @param {String} selector The AddressSearch input selector
      * @static
      */
     static destroy(selector){
