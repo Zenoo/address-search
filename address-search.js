@@ -89,17 +89,13 @@ class AddressSearch{
                             this._predictions.appendChild(li);
                         }
 
-                        console.log(predictions[0]);
-                        console.log(this._capitalize(predictions[0].description.substring(0, predictions[0].matched_substrings[0].length)));
-                        console.log(this._input.value);
-
                         if(this._capitalize(predictions[0].description.substring(0, predictions[0].matched_substrings[0].length)) == this._input.value){
                             this._typeahead.value = this._capitalize(predictions[0].description);
-                            this._togglePredictions('on');
                         }else{
                             this._typeahead.value = '';
                         }
-                        
+
+                        this._togglePredictions('on');
 
                         //onPredict callbacks
                         for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
