@@ -36,6 +36,7 @@
 .address-search .address-search-predictions li {
   padding: 2px 5px;
   cursor: pointer;
+  font-family: Arial;
 }
 .address-search .address-search-predictions li > span:last-of-type {
   font-size: 12px;
