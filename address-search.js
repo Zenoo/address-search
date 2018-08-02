@@ -311,4 +311,19 @@ class AddressSearch{
         let cleanInput = this._input.cloneNode(true);
         this._input.parentNode.replaceChild(cleanInput, this._input);
     }
+
+    /**
+     * Removes any AddressSearch mutation from the DOM
+     */
+    static destroy(selector){
+        let element = document.querySelector(selector);
+
+        element.parentNode.parentNode.insertBefore(element, element.parentNode);
+        element.nextElementSibling.remove();
+        element.classList.remove('address-search-input');
+
+        //Remove event listeners
+        let cleanInput = element.cloneNode(true);
+        element.parentNode.replaceChild(cleanInput, element);
+    }
 }
