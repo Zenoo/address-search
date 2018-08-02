@@ -82,9 +82,11 @@ class AddressSearch{
                             mainText.innerText = prediction.structured_formatting.main_text;
                             li.appendChild(mainText);
 
-                            let secondaryText = document.createElement('span');
-                            secondaryText.innerText = prediction.structured_formatting.secondary_text;
-                            li.appendChild(secondaryText);
+                            if(prediction.structured_formatting.secondary_text){
+                                let secondaryText = document.createElement('span');
+                                secondaryText.innerText = prediction.structured_formatting.secondary_text;
+                                li.appendChild(secondaryText);
+                            }
 
                             this._predictions.appendChild(li);
                         }
