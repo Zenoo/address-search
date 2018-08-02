@@ -220,7 +220,7 @@ class AddressSearch{
      */
     _getPlaceComponent(component,isShort){
         let target = this.value.address_components.filter(c => c.types.includes(component));
-        if(target){
+        if(target.length){
             return isShort ? target[0].short_name : target[0].long_name
         }else return '';
     }
