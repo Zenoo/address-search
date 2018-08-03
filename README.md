@@ -12,7 +12,7 @@ Simply import Google Places API & AddressSearch into your HTML.
 ```
 
 <link rel="stylesheet" href="address-search.css">
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 <script src="address-search.js"></script>
 ```
 * **How to use**
