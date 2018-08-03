@@ -11,7 +11,8 @@
   border: 1px solid #a9a9a9;
   padding: 2px 5px;
 }
-.address-search .address-search-input {
+.address-search .address-search-input,
+.address-search [data-stored-class-address-search-input] {
   position: relative;
   z-index: 2;
   background: none;
