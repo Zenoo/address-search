@@ -160,7 +160,8 @@ class AddressSearch{
             if(key == 9 || key == 13){ //TAB || ENTER
                 e.preventDefault();
 
-                this._select(this._predictions.firstElementChild.getAttribute('data-place-id'));
+                if(this._input.value.length) this._select(this._predictions.firstElementChild.getAttribute('data-place-id'));
+                else this._input.blur();
             }
         });
 
