@@ -174,11 +174,6 @@ class AddressSearch{
                 this._input.setAttribute('id',inputId);
                 this._input.removeAttribute('data-old-id');
             }
-
-            for(let classAttribute of Array.from(this._input.attributes).filter(a => a.name.startsWith('data-stored-class-'))){
-                this._input.classList.add(classAttribute.name.replace('data-stored-class-',''));
-                this._input.removeAttribute(classAttribute.name);
-            }
         });
 
         this._predictions.addEventListener('mousedown', e => {
@@ -207,11 +202,6 @@ class AddressSearch{
                 this._input.setAttribute('data-old-id',inputId);
                 this._input.removeAttribute('id');
             }
-
-            for(let className of this._input.classList){
-                this._input.setAttribute('data-stored-class-'+className,'');
-            }
-            this._input.removeAttribute('class');
         });
     }
 
