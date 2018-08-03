@@ -209,7 +209,7 @@ class AddressSearch{
             }
 
             for(let className of this._input.classList){
-                this._input.setAttribute('data-stored-class-'+className);
+                this._input.setAttribute('data-stored-class-'+className,'');
             }
             this._input.removeAttribute('class');
         });
