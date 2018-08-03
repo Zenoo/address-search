@@ -163,17 +163,17 @@ class AddressSearch{
             }
 
             //AUTOCOMPLETE HACK
-            // let inputName = this._input.getAttribute('data-old-name')
-            // if(inputName){
-            //     this._input.setAttribute('name',inputName);
-            //     this._input.removeAttribute('data-old-name');
-            // }
+            let inputName = this._input.getAttribute('data-old-name')
+            if(inputName){
+                this._input.setAttribute('name',inputName);
+                this._input.removeAttribute('data-old-name');
+            }
 
-            // let inputId = this._input.getAttribute('data-old-id')
-            // if(inputId){
-            //     this._input.setAttribute('id',inputId);
-            //     this._input.removeAttribute('data-old-id');
-            // }
+            let inputId = this._input.getAttribute('data-old-id')
+            if(inputId){
+                this._input.setAttribute('id',inputId);
+                this._input.removeAttribute('data-old-id');
+            }
 
             
         });
@@ -192,22 +192,22 @@ class AddressSearch{
         });
 
         //AUTOCOMPLETE HIDING HACK
-        this._input.addEventListener('focus', e => {
-            // let inputName = this._input.getAttribute('name');
-            // if(inputName){
-            //     this._input.setAttribute('data-old-name',inputName);
-            //     this._input.removeAttribute('name');
-            // }
-
-            // let inputId = this._input.getAttribute('id');
-            // if(inputId){
-            //     this._input.setAttribute('data-old-id',inputId);
-            //     this._input.removeAttribute('id');
-            // }
-
-            for(let attribute of this._input.attributes){
-                if(attribute.name != 'type') this._input.removeAttribute(attribute.name);
+        this._input.addEventListener('mousedown', e => {
+            let inputName = this._input.getAttribute('name');
+            if(inputName){
+                this._input.setAttribute('data-old-name',inputName);
+                this._input.removeAttribute('name');
             }
+
+            let inputId = this._input.getAttribute('id');
+            if(inputId){
+                this._input.setAttribute('data-old-id',inputId);
+                this._input.removeAttribute('id');
+            }
+
+            // for(let attribute of this._input.attributes){
+            //     if(attribute.name != 'type') this._input.removeAttribute(attribute.name);
+            // }
         });
     }
 
