@@ -58,7 +58,12 @@ class AddressSearch{
 
         this._typeahead = document.createElement('input');
         this._typeahead.classList.add('address-search-typeahead');
+        
+        let typeaheadLure = this._typeahead.cloneNode(true);
+        typeaheadLure.classList.add('lure');
+
         this._wrapper.appendChild(this._typeahead);
+        this._wrapper.appendChild(typeaheadLure);
 
         this._lure.classList.add('address-search-lure');
         this._wrapper.appendChild(this._lure);

@@ -11,8 +11,11 @@
   border: 1px solid #a9a9a9;
   padding: 2px 5px;
 }
+.address-search .address-search-typeahead.lure {
+  display: none !important;
+}
 .address-search .address-search-lure {
-  display: none;
+  display: none !important;
 }
 .address-search .address-search-input {
   position: relative;
