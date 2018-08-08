@@ -355,6 +355,18 @@ class AddressSearch{
     }
 
     /**
+     * Resets the AddressSearch
+     * @returns {AddressSearch} The current {@link AddressSearch}
+     */
+    reset(){
+        this.value = {};
+        this._input.value = '';
+        this._lure.value = '';
+        this._typeahead.value = '';
+        return this;
+    }
+
+    /**
      * Removes any AddressSearch mutation from the DOM
      */
     destroy(){
