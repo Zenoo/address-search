@@ -58,6 +58,9 @@ class AddressSearch{
         this._economizer = {};
 
         /** @private */
+        this._lure = this._input.cloneNode(true);
+
+        /** @private */
         this._onSelect = [];
         /** @private */
         this._onPredict = [];
@@ -83,9 +86,19 @@ class AddressSearch{
 
         this._typeahead = document.createElement('input');
         this._typeahead.classList.add('address-search-typeahead');
+        
+        let typeaheadLure = this._typeahead.cloneNode(true);
+        typeaheadLure.classList.add('lure');
+
+        this._wrapper.appendChild(typeaheadLure);
         this._wrapper.appendChild(this._typeahead);
 
+        this._lure.classList.add('address-search-lure');
+        this._wrapper.appendChild(this._lure);
+
         this._input.classList.add('address-search-input');
+        this._input.removeAttribute('id');
+        this._input.removeAttribute('name');
         this._wrapper.appendChild(this._input);
 
         this._predictions = document.createElement('ul');
@@ -99,8 +112,11 @@ class AddressSearch{
      */
     _listen(){
         this._input.addEventListener('input',() => {
+            this._lure.value = this._input.value;
+
             if(this._input.value.length){
                 this._input.value = this._capitalize(this._input.value);
+                this._lure.value = this._input.value;
 
                 if(this._economizer[this._input.value]){
                     this._predictions.innerHTML = this._economizer[this._input.value];
@@ -177,7 +193,8 @@ class AddressSearch{
             if(key == 9 || key == 13){ //TAB || ENTER
                 e.preventDefault();
 
-                this._select(this._predictions.firstElementChild.getAttribute('data-place-id'));
+                if(this._input.value.length) this._select(this._predictions.firstElementChild.getAttribute('data-place-id'));
+                else this._input.blur();
             }
         });
 
@@ -185,22 +202,12 @@ class AddressSearch{
             if(Object.keys(this.value).length === 0 &amp;&amp; this.value.constructor === Object){
                 setTimeout(() => {
                     this._input.value = '';
+                    this._lure.value = this._input.value;
                     this._typeahead.value = '';
                     this._togglePredictions('off');
                 },1);
             }
-
-            let inputName = this._input.getAttribute('data-old-name')
-            if(inputName){
-                this._input.setAttribute('name',inputName);
-                this._input.removeAttribute('data-old-name');
-            }
-
-            let inputId = this._input.getAttribute('data-old-id')
-            if(inputId){
-                this._input.setAttribute('id',inputId);
-                this._input.removeAttribute('data-old-id');
-            }
+            
         });
 
         this._predictions.addEventListener('mousedown', e => {
@@ -213,21 +220,6 @@ class AddressSearch{
             if(e.target &amp;&amp; (e.target.nodeName == 'LI' || e.target.nodeName == 'SPAN')){
                 let li = e.target.closest('li');
                 this._select(li.getAttribute('data-place-id'))
-            }
-        });
-
-        //AUTOCOMPLETE HIDING HACK
-        this._input.addEventListener('focus', e => {
-            let inputName = this._input.getAttribute('name');
-            if(inputName){
-                this._input.setAttribute('data-old-name',inputName);
-                this._input.removeAttribute('name');
-            }
-
-            let inputId = this._input.getAttribute('id');
-            if(inputId){
-                this._input.setAttribute('data-old-id',inputId);
-                this._input.removeAttribute('id');
             }
         });
     }
@@ -271,6 +263,7 @@ class AddressSearch{
 
                 this.value = place;
                 this._input.value = place.formatted_address;
+                this._lure.value = this._input.value;
                 this._typeahead.value = '';
 
                 if(Object.keys(this._parameters).length !== 0){
@@ -376,14 +369,26 @@ class AddressSearch{
         }else{
             this.value = value;
             this._input.value = value.formatted_address;
+            this._lure.value = this._input.value;
             this._typeahead.value = '';
         }
+    }
+
+    /**
+     * Manually sets the AddressSearch value via a `place_id`
+     * @param {Integer} place_id New place_id
+     */
+    setPlace(place_id){
+        this._select(place_id);
     }
 
     /**
      * Removes any AddressSearch mutation from the DOM
      */
     destroy(){
+        if(this._lure.id) this._input.setAttribute('id',this._lure.id);
+        if(this._lure.getAttribute('name')) this._input.setAttribute('name',this._lure.getAttribute('name'));
+
         this._input.parentNode.parentNode.insertBefore(this._input, this._wrapper);
         this._wrapper.remove();
         this._input.classList.remove('address-search-input');
@@ -399,8 +404,12 @@ class AddressSearch{
      * @static
      */
     static destroy(selector){
-        let element = document.querySelector(selector);
-
+        let lure = document.querySelector(selector);
+        let element = lure.parentNode.querySelector('.address-search-input');
+        
+        if(lure.id) element.setAttribute('id',lure.id);
+        if(lure.getAttribute('name')) element.setAttribute('name',lure.getAttribute('name'));
+        
         element.parentNode.parentNode.insertBefore(element, element.parentNode);
         element.nextElementSibling.remove();
         element.classList.remove('address-search-input');
@@ -425,7 +434,7 @@ class AddressSearch{
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Aug 03 2018 08:59:53 GMT+0200 (Romance Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Aug 08 2018 09:03:00 GMT+0200 (Romance Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
