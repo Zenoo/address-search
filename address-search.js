@@ -347,6 +347,14 @@ class AddressSearch{
     }
 
     /**
+     * Manually sets the AddressSearch value via a `place_id`
+     * @param {Integer} place_id New place_id
+     */
+    setPlace(place_id){
+        this._select(place_id);
+    }
+
+    /**
      * Removes any AddressSearch mutation from the DOM
      */
     destroy(){
