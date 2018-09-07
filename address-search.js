@@ -103,6 +103,8 @@ class AddressSearch{
 
                     for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
                 }else{
+                    console.log(this);
+                    console.log(this._fetchPredictions);
                     this._fetchPredictions.getPlacePredictions({ input: this._input.value }, (predictions, status) => {
                         this._resetPredictions();
     
@@ -385,6 +387,7 @@ class AddressSearch{
         this._fetchPredictions = googleService.maps.places.AutocompleteService();
         this._fetchPlace = googleService.maps.places.PlacesService(document.createElement('div'));
         this._economizer = {};
+        console.log(this._fetchPredictions);
         return this;
     }
 
