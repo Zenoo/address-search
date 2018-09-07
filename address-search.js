@@ -377,6 +377,17 @@ class AddressSearch{
     }
 
     /**
+     * Use a different 'google' object to fetch data
+     * @param {Object} googleService - The service to use
+     * @returns {AddressSearch} The current {@link AddressSearch}
+     */
+    useService(googleService){
+        this._fetchPredictions = googleService.maps.places.AutocompleteService();
+        this._fetchPlace = googleService.maps.places.PlacesService(document.createElement('div'));
+        return this;
+    }
+
+    /**
      * Removes any AddressSearch mutation from the DOM
      */
     destroy(){
