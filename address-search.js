@@ -367,6 +367,16 @@ class AddressSearch{
     }
 
     /**
+     * Refreshes the Google API fetchers
+     * @returns {AddressSearch} The current {@link AddressSearch}
+     */
+    refreshService(){
+        this._fetchPredictions = new google.maps.places.AutocompleteService();
+        this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
+        return this;
+    }
+
+    /**
      * Removes any AddressSearch mutation from the DOM
      */
     destroy(){
