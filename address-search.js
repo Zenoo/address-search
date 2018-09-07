@@ -329,7 +329,6 @@ class AddressSearch{
      */
     setValue(value){
         if(typeof value === 'string'){
-            //ASYNC STUFF, HOW TO DEAL WITH THE CHAINABILITY ?
             this._fetchPredictions.getPlacePredictions({ input: value }, (predictions, status) => {
                 if(status == google.maps.places.PlacesServiceStatus.OK){
                     let prediction = predictions[0];
@@ -373,6 +372,7 @@ class AddressSearch{
     refreshService(){
         this._fetchPredictions = new google.maps.places.AutocompleteService();
         this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
+        this._economizer = {};
         return this;
     }
 
@@ -384,6 +384,7 @@ class AddressSearch{
     useService(googleService){
         this._fetchPredictions = googleService.maps.places.AutocompleteService();
         this._fetchPlace = googleService.maps.places.PlacesService(document.createElement('div'));
+        this._economizer = {};
         return this;
     }
 
