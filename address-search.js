@@ -250,11 +250,11 @@ class AddressSearch{
                     }
     
                     this._input.blur();
+
+                    resolve();
     
                     //onSelect callbacks
                     for(let callback of this._onSelect) callback.call(this,this.value);
-
-                    resolve();
                 }else{
                     console.log(status);
                     reject(status);
