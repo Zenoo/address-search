@@ -229,6 +229,7 @@ class AddressSearch{
      * @private
      */
     _select(placeId){
+        console.log('_select CALLED');
         return new Promise((resolve, reject) => {
             this._fetchPlace.getDetails({placeId: placeId}, (place, status) => {
                 if(status == google.maps.places.PlacesServiceStatus.OK){
@@ -254,7 +255,10 @@ class AddressSearch{
                     resolve();
     
                     //onSelect callbacks
-                    for(let callback of this._onSelect) callback.call(this,this.value);
+                    for(let callback of this._onSelect){
+                        console.log('_select callback CALLED');
+                        callback.call(this,this.value);
+                    }
                 }else{
                     console.log(status);
                     reject(status);
