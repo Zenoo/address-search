@@ -1,0 +1,36 @@
+{
+  "name": "address-searcher",
+  "title": "AddressSearch",
+  "description": "Address searching with typeaheads and multiple choices",
+  "keywords": [
+    "address",
+    "search",
+    "google",
+    "autocomplete",
+    "prediction",
+    "input",
+    "typeahead"
+  ],
+  "version": "1.6.3",
+  "author": {
+    "name": "Zenoo",
+    "url": "https://github.com/Zenoo"
+  },
+  "maintainers": [
+    {
+      "name": "Zenoo",
+      "url": "https://github.com/Zenoo"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "bugs": "https://github.com/Zenoo/address-search/issues",
+  "homepage": "https://github.com/Zenoo/address-search",
+  "docs": "https://github.com/Zenoo/address-search#readme",
+  "download": "https://github.com/Zenoo/address-search/archive/master.zip",
+  "dependencies": {}
+}
