@@ -191,7 +191,6 @@ class AddressSearch{
 
             if(e.target && (e.target.nodeName == 'LI' || e.target.nodeName == 'SPAN')){
                 let li = e.target.closest('li');
-                console.log('_select call from li click');
                 this._select(li.getAttribute('data-place-id'))
             }
         });
@@ -226,11 +225,12 @@ class AddressSearch{
 
     /**
      * Handles a place selection
+     * @param {String} placeId The place ID
+     * @param {Boolean} [triggerCallbacks=true] Should the method trigger the select callbacks?
      * @returns {Promise} - Resolves when the place has been selected
      * @private
      */
-    _select(placeId){
-        console.log('_select CALLED');
+    _select(placeId, triggerCallbacks = true){
         return new Promise((resolve, reject) => {
             this._fetchPlace.getDetails({placeId: placeId}, (place, status) => {
                 if(status == google.maps.places.PlacesServiceStatus.OK){
@@ -252,14 +252,13 @@ class AddressSearch{
                     }
     
                     this._input.blur();
-
-                    resolve();
     
                     //onSelect callbacks
-                    for(let callback of this._onSelect){
-                        console.log('_select callback CALLED');
-                        callback.call(this,this.value);
+                    if(triggerCallbacks){
+                        for(let callback of this._onSelect) callback.call(this,this.value);
                     }
+
+                    resolve();
                 }else{
                     console.log(status);
                     reject(status);
@@ -337,13 +336,14 @@ class AddressSearch{
     /**
      * Manually sets the AddressSearch value
      * @param {String|PlaceResult} value New value
+     * @param {Boolean} [triggerCallbacks=true] Should the method trigger the select callbacks?
      */
-    setValue(value){
+    setValue(value, triggerCallbacks = true){
         if(typeof value === 'string'){
             this._fetchPredictions.getPlacePredictions({ input: value }, (predictions, status) => {
                 if(status == google.maps.places.PlacesServiceStatus.OK){
                     let prediction = predictions[0];
-                    this._select(prediction.place_id);
+                    this._select(prediction.place_id, triggerCallbacks);
                 }else{
                     console.log(status);
                 }
@@ -359,11 +359,11 @@ class AddressSearch{
     /**
      * Manually sets the AddressSearch value via a `place_id`
      * @param {Integer} place_id New place_id
+     * @param {Boolean} [triggerCallbacks=true] Should the method trigger the select callbacks?
      * @returns {Promise} - Resolves when the place has been set
      */
-    setPlace(place_id){
-        console.log('setPlace called');
-        return this._select(place_id);
+    setPlace(place_id, triggerCallbacks = true){
+        return this._select(place_id, triggerCallbacks);
     }
 
     /**
