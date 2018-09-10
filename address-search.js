@@ -191,6 +191,7 @@ class AddressSearch{
 
             if(e.target && (e.target.nodeName == 'LI' || e.target.nodeName == 'SPAN')){
                 let li = e.target.closest('li');
+                console.log('_select call from li click');
                 this._select(li.getAttribute('data-place-id'))
             }
         });
@@ -361,6 +362,7 @@ class AddressSearch{
      * @returns {Promise} - Resolves when the place has been set
      */
     setPlace(place_id){
+        console.log('setPlace called');
         return this._select(place_id);
     }
 
