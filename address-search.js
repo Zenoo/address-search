@@ -103,8 +103,6 @@ class AddressSearch{
 
                     for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
                 }else{
-                    console.log(this);
-                    console.log(this._fetchPredictions);
                     this._fetchPredictions.getPlacePredictions({ input: this._input.value }, (predictions, status) => {
                         this._resetPredictions();
     
@@ -226,36 +224,42 @@ class AddressSearch{
     }
 
     /**
-     * Capitalize a String
+     * Handles a place selection
+     * @returns {Promise} - Resolves when the place has been selected
      * @private
      */
     _select(placeId){
-        this._fetchPlace.getDetails({placeId: placeId}, (place, status) => {
-            if(status == google.maps.places.PlacesServiceStatus.OK){
-                this._togglePredictions('off');
-                this._resetPredictions();
-
-                this.value = place;
-                this._input.value = place.formatted_address;
-                this._lure.value = this._input.value;
-                this._typeahead.value = '';
-
-                if(Object.keys(this._parameters).length !== 0){
-                    for(let prop in this._parameters){
-                        let target = document.querySelector(this._parameters[prop]);
-                        if(target){
-                            target.value = prop.endsWith('_short') ? this._getPlaceComponent(prop.slice(0, -6), true) : this._getPlaceComponent(prop);
+        return new Promise((resolve, reject) => {
+            this._fetchPlace.getDetails({placeId: placeId}, (place, status) => {
+                if(status == google.maps.places.PlacesServiceStatus.OK){
+                    this._togglePredictions('off');
+                    this._resetPredictions();
+    
+                    this.value = place;
+                    this._input.value = place.formatted_address;
+                    this._lure.value = this._input.value;
+                    this._typeahead.value = '';
+    
+                    if(Object.keys(this._parameters).length !== 0){
+                        for(let prop in this._parameters){
+                            let target = document.querySelector(this._parameters[prop]);
+                            if(target){
+                                target.value = prop.endsWith('_short') ? this._getPlaceComponent(prop.slice(0, -6), true) : this._getPlaceComponent(prop);
+                            }
                         }
                     }
+    
+                    this._input.blur();
+    
+                    //onSelect callbacks
+                    for(let callback of this._onSelect) callback.call(this,this.value);
+
+                    resolve();
+                }else{
+                    console.log(status);
+                    reject(status);
                 }
-
-                this._input.blur();
-
-                //onSelect callbacks
-                for(let callback of this._onSelect) callback.call(this,this.value);
-            }else{
-                console.log(status);
-            }
+            });
         });
     }
 
@@ -350,9 +354,10 @@ class AddressSearch{
     /**
      * Manually sets the AddressSearch value via a `place_id`
      * @param {Integer} place_id New place_id
+     * @returns {Promise} - Resolves when the place has been set
      */
     setPlace(place_id){
-        this._select(place_id);
+        return this._select(place_id);
     }
 
     /**
@@ -387,7 +392,6 @@ class AddressSearch{
         this._fetchPredictions = googleService.maps.places.AutocompleteService();
         this._fetchPlace = googleService.maps.places.PlacesService(document.createElement('div'));
         this._economizer = {};
-        console.log(this._fetchPredictions);
         return this;
     }
 
