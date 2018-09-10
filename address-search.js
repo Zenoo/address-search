@@ -264,7 +264,7 @@ class AddressSearch{
     }
 
     /**
-     * Capitalize a String
+     * Get a component for the current place.
      * @private
      */
     _getPlaceComponent(component,isShort){
