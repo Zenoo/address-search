@@ -11,9 +11,9 @@ Address searching with typeaheads and multiple choices
 Simply import Google Places API & AddressSearch into your HTML.
 ```
 
-<link rel="stylesheet" href="address-search.css">
+<link rel="stylesheet" href="address-search.min.css">
 <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
-<script src="address-search.js"></script>
+<script src="address-search.min.js"></script>
 ```
 * **How to use**
 
