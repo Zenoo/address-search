@@ -41,7 +41,7 @@ typename_short : 'targetInput[selector]'
 Available components:
 ```
 {
-  street_address: '...',
+  street_number: '...',
   route: '...',
   country: '...',
   administrative_area_level_1: '...',
