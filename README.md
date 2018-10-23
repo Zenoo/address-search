@@ -61,7 +61,7 @@ Available components:
 ```
 * **Delay**
 
-You can use the third parameter to enter a delay.  
+You can use the third parameter to enter a delay (ms).  
 This delay will be used before displaying Google API predictions after each keypress.  
 This can help you mitigate the amount of requests made on your account.
 
