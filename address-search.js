@@ -24,7 +24,13 @@ class AddressSearch{
         /** @private */
         this._fetchPredictions = new google.maps.places.AutocompleteService();
         /** @private */
-        this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
+		this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
+		
+		/** @private */
+		this._token = '';
+
+		/** @private */
+		this._usedTokens = [];
 
         /** @private */
         this._economizer = {};
@@ -43,6 +49,7 @@ class AddressSearch{
         /** @type {PlaceResult} */
         this.value = {};
 
+		this._generateToken();
         this._build();
         this._listen();
     }
@@ -103,7 +110,7 @@ class AddressSearch{
 
                     for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
                 }else{
-                    this._fetchPredictions.getPlacePredictions({ input: this._input.value }, (predictions, status) => {
+                    this._fetchPredictions.getPlacePredictions({ input: this._input.value, sessiontoken: this._token }, (predictions, status) => {
                         this._resetPredictions();
     
                         if(status == google.maps.places.PlacesServiceStatus.OK){
@@ -232,8 +239,9 @@ class AddressSearch{
      */
     _select(placeId, triggerCallbacks = true){
         return new Promise((resolve, reject) => {
-            this._fetchPlace.getDetails({placeId: placeId}, (place, status) => {
+            this._fetchPlace.getDetails({placeId: placeId, sessiontoken: this._token}, (place, status) => {
                 if(status == google.maps.places.PlacesServiceStatus.OK){
+					this._generateToken();
                     this._togglePredictions('off');
                     this._resetPredictions();
     
@@ -276,7 +284,21 @@ class AddressSearch{
         if(target.length){
             return isShort ? target[0].short_name : target[0].long_name
         }else return '';
-    }
+	}
+	
+	/**
+     * Generate a new unique token for Google Places API
+     * @private
+     */
+	_generateToken(){
+		let newToken = this._token;
+		while(newToken == '' || this._usedTokens.includes(newToken)){
+			newToken = (Math.random() + 1).toString(36).substring(7);
+			console.log(newToken);
+		}
+		this._token = newToken;
+		this._usedTokens.push(this._token);
+	}
 
     /**
      * Function called after a selection.
