@@ -10,10 +10,11 @@ class AddressSearch{
     /**
      * Creates an instance of AddressSearch
      * and checks for invalid parameters
-     * @param {(Element|String)} target                   The input targeted by the AddressSearch module
-     * @param {Object}           [parameters]             Additional optional parameters
+     * @param {(Element|String)} target                   	The input targeted by the AddressSearch module
+     * @param {Object}           [parameters]             	Additional optional parameters
+     * @param {Object}           [delay]             		Delay to wait between keypresses before calling the API
      */
-    constructor(target, parameters = {}){
+    constructor(target, parameters = {}, delay){
         /** @private */
         this._input = target instanceof Element ? target : document.querySelector(target);
 
@@ -44,7 +45,14 @@ class AddressSearch{
         this._onPredict = [];
 
         /** @private */
-        this._parameters = parameters;
+		this._parameters = parameters;
+		
+		/** @private */
+		this._delay = delay;
+		/** @private */
+		this._lastKeypress = null;
+		/** @private */
+		this._timeout = null;
 
         /** @type {PlaceResult} */
         this.value = {};
@@ -91,11 +99,18 @@ class AddressSearch{
      */
     _listen(){
         this._input.addEventListener('input',() => {
+			clearTimeout(this._timeout);
             this._lure.value = this._input.value;
 
+			// Input not empty
             if(this._input.value.length){
                 this._input.value = this._capitalize(this._input.value);
-                this._lure.value = this._input.value;
+				this._lure.value = this._input.value;
+				
+				// Clean typeahead on delay
+				if(this._delay){
+					this._typeahead.value = '';
+				}
 
                 if(this._economizer[this._input.value]){
                     this._predictions.innerHTML = this._economizer[this._input.value];
@@ -110,53 +125,14 @@ class AddressSearch{
 
                     for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
                 }else{
-                    this._fetchPredictions.getPlacePredictions({ input: this._input.value, sessiontoken: this._token }, (predictions, status) => {
-                        this._resetPredictions();
-    
-                        if(status == google.maps.places.PlacesServiceStatus.OK){
-                            for(let prediction of predictions){
-                                let li = document.createElement('li');
-                                li.setAttribute('data-place-id', prediction.place_id);
-                                li.setAttribute('data-place-description', this._capitalize(prediction.description).replace(/"/g,"'"));
-    
-                                let mainText = document.createElement('span');
-                                mainText.innerText = prediction.structured_formatting.main_text;
-                                li.appendChild(mainText);
-    
-                                if(prediction.structured_formatting.secondary_text){
-                                    let secondaryText = document.createElement('span');
-                                    secondaryText.innerText = prediction.structured_formatting.secondary_text;
-                                    li.appendChild(secondaryText);
-                                }
-    
-                                this._predictions.appendChild(li);
-                            }
-    
-                            this._economizer[this._input.value] = this._predictions.innerHTML;
-    
-                            if(this._capitalize(predictions[0].description.substring(0, predictions[0].matched_substrings[0].length)) == this._input.value){
-                                this._typeahead.value = this._capitalize(predictions[0].description);
-                            }else{
-                                this._typeahead.value = '';
-                            }
-    
-                            this._togglePredictions('on');
-    
-                            //onPredict callbacks
-                            for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
-                        }else{
-                            if(status == 'ZERO_RESULTS'){
-                                let li = document.createElement('li');
-                                li.classList.add('empty-results');
-                                li.innerText = 'No address found';
-                                this._predictions.appendChild(li);
-    
-                                this._typeahead.value = '';
-                            }else{
-                                console.log(status);
-                            }
-                        }
-                    });
+					if(this._delay){
+						this._timeout = setTimeout(() => {
+							this._getPredictions();
+						}, this._delay);
+					}else{
+						this._getPredictions();
+					}
+                    
                 }
             }else{
                 this._typeahead.value = '';
@@ -201,7 +177,61 @@ class AddressSearch{
                 this._select(li.getAttribute('data-place-id'))
             }
         });
-    }
+	}
+	
+	/**
+	 * Gets the predictions from the API
+	 * @private
+	 */
+	_getPredictions(){
+		this._fetchPredictions.getPlacePredictions({ input: this._input.value, sessiontoken: this._token }, (predictions, status) => {
+			this._resetPredictions();
+
+			if(status == google.maps.places.PlacesServiceStatus.OK){
+				for(let prediction of predictions){
+					let li = document.createElement('li');
+					li.setAttribute('data-place-id', prediction.place_id);
+					li.setAttribute('data-place-description', this._capitalize(prediction.description).replace(/"/g,"'"));
+
+					let mainText = document.createElement('span');
+					mainText.innerText = prediction.structured_formatting.main_text;
+					li.appendChild(mainText);
+
+					if(prediction.structured_formatting.secondary_text){
+						let secondaryText = document.createElement('span');
+						secondaryText.innerText = prediction.structured_formatting.secondary_text;
+						li.appendChild(secondaryText);
+					}
+
+					this._predictions.appendChild(li);
+				}
+
+				this._economizer[this._input.value] = this._predictions.innerHTML;
+
+				if(this._capitalize(predictions[0].description.substring(0, predictions[0].matched_substrings[0].length)) == this._input.value){
+					this._typeahead.value = this._capitalize(predictions[0].description);
+				}else{
+					this._typeahead.value = '';
+				}
+
+				this._togglePredictions('on');
+
+				//onPredict callbacks
+				for(let callback of this._onPredict) callback.call(this,this._input.value,this._predictions);
+			}else{
+				if(status == 'ZERO_RESULTS'){
+					let li = document.createElement('li');
+					li.classList.add('empty-results');
+					li.innerText = 'No address found';
+					this._predictions.appendChild(li);
+
+					this._typeahead.value = '';
+				}else{
+					console.log(status);
+				}
+			}
+		});
+	}
 
     /**
      * Empty the predictions
