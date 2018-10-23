@@ -29,7 +29,7 @@ class AddressSearch{
 			this._errors.push('AddressSearch: The element has already been initialized.');
 		}
 
-		if(!this._errors){ // GOOD TO GO !
+		if(!this._errors.length){ // GOOD TO GO !
 			/** @private */
 			this._fetchPredictions = new google.maps.places.AutocompleteService();
 			/** @private */
