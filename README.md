@@ -19,10 +19,10 @@ Simply import Google Places API & AddressSearch into your HTML.
 
 Create a new [`AddressSearch`](https://zenoo.github.io/address-search/AddressSearch.html) object with a query String or an Element as the first parameter :
 ```
-let address = new AddressSearch('div.with[any="selector"]', options);
+let address = new AddressSearch('div.with[any="selector"]', options, delay);
 // OR
 let element = document.querySelector('li.terally[any="thing"]');
-let address = new AddressSearch(element, options);
+let address = new AddressSearch(element, options, delay);
 ```
 * **Options**
 
@@ -58,6 +58,17 @@ Available components:
   postal_code: '...',
   point_of_interest: '...'
 }
+```
+* **Delay**
+
+You can use the third parameter to enter a delay.  
+This delay will be used before displaying Google API predictions after each keypress.  
+This can help you mitigate the amount of requests made on your account.
+
+
+The `delay` parameter works as follows
+```
+new AddressSearch(element, options, 500);
 ```
 * **Methods**
 
