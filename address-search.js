@@ -294,7 +294,6 @@ class AddressSearch{
 		let newToken = this._token;
 		while(newToken == '' || this._usedTokens.includes(newToken)){
 			newToken = (Math.random() + 1).toString(36).substring(7);
-			console.log(newToken);
 		}
 		this._token = newToken;
 		this._usedTokens.push(this._token);
