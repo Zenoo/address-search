@@ -16,50 +16,63 @@ class AddressSearch{
      */
     constructor(target, parameters = {}, delay){
         /** @private */
-        this._input = target instanceof Element ? target : document.querySelector(target);
+		this._input = target instanceof Element ? target : document.querySelector(target);
+		
+		/** @private */
+		this._errors = [];
 
         //Errors checking
-        if(!this._input) throw new Error('AddressSearch: '+(typeof target == 'string' ? 'The selector `'+target+'` didn\'t match any element.' : 'The element you provided was undefined'));
-        if(this._input.classList.contains('address-search-input')) throw new Error('AddressSearch: The element has already been initialized.');
+        if(!this._input){
+			this._errors.push('AddressSearch: '+(typeof target == 'string' ? 'The selector `'+target+'` didn\'t match any element.' : 'The element you provided was undefined'));
+		}
+		if(this._input.classList.contains('address-search-input')){
+			this._errors.push('AddressSearch: The element has already been initialized.');
+		}
 
-        /** @private */
-        this._fetchPredictions = new google.maps.places.AutocompleteService();
-        /** @private */
-		this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
-		
-		/** @private */
-		this._token = '';
+		if(!this._errors){ // GOOD TO GO !
+			/** @private */
+			this._fetchPredictions = new google.maps.places.AutocompleteService();
+			/** @private */
+			this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
 
-		/** @private */
-		this._usedTokens = [];
+			/** @private */
+			this._token = '';
 
-        /** @private */
-        this._economizer = {};
+			/** @private */
+			this._usedTokens = [];
 
-        /** @private */
-        this._lure = this._input.cloneNode(true);
+			/** @private */
+			this._economizer = {};
 
-        /** @private */
-        this._onSelect = [];
-        /** @private */
-        this._onPredict = [];
+			/** @private */
+			this._lure = this._input.cloneNode(true);
 
-        /** @private */
-		this._parameters = parameters;
-		
-		/** @private */
-		this._delay = delay;
-		/** @private */
-		this._lastKeypress = null;
-		/** @private */
-		this._timeout = null;
+			/** @private */
+			this._onSelect = [];
+			/** @private */
+			this._onPredict = [];
 
-        /** @type {PlaceResult} */
-        this.value = {};
+			/** @private */
+			this._parameters = parameters;
 
-		this._generateToken();
-        this._build();
-        this._listen();
+			/** @private */
+			this._delay = delay;
+			/** @private */
+			this._lastKeypress = null;
+			/** @private */
+			this._timeout = null;
+
+			/** @type {PlaceResult} */
+			this.value = {};
+
+			this._generateToken();
+			this._build();
+			this._listen();
+		}else{
+			this._errors.forEach(error => {
+				console.warn(error);
+			});
+		}
     }
 
     /**
