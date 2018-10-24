@@ -299,7 +299,7 @@ class AddressSearch{
                             let target = document.querySelector(this._parameters[prop]);
                             if(target){
 								target.value = prop.endsWith('_short') ? this._getPlaceComponent(prop.slice(0, -6), true) : this._getPlaceComponent(prop);
-								target.disabled = !!target.value.length;
+								target.readonly = !!target.value.length;
 							}
                         }
                     }
