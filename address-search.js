@@ -25,11 +25,14 @@ class AddressSearch{
         if(!this._input){
 			this._errors.push('AddressSearch: '+(typeof target == 'string' ? 'The selector `'+target+'` didn\'t match any element.' : 'The element you provided was undefined'));
 		}
-		if(this._input.classList.contains('address-search-input')){
+		if(this._input && this._input.classList.contains('address-search-input')){
 			this._errors.push('AddressSearch: The element has already been initialized.');
 		}
 
 		if(!this._errors.length){ // GOOD TO GO !
+			/** @type {Number} */
+			this.uniqueId = document.querySelectorAll('.address-search[data-unique-id]').length + 1;
+
 			/** @private */
 			this._fetchPredictions = new google.maps.places.AutocompleteService();
 			/** @private */
@@ -65,6 +68,12 @@ class AddressSearch{
 			/** @type {PlaceResult} */
 			this.value = {};
 
+			/** @private */
+			this._components = Object.entries(this._parameters).reduce((acc, [component, target]) => {
+				acc[component] = document.querySelector(target);
+				return acc;
+			}, {});
+
 			this._generateToken();
 			this._build();
 			this._listen();
@@ -81,7 +90,8 @@ class AddressSearch{
      */
     _build(){
         this._wrapper = document.createElement('div');
-        this._wrapper.classList.add('address-search');
+		this._wrapper.classList.add('address-search');
+		this._wrapper.setAttribute('data-unique-id', this.uniqueId);
         this._input.parentNode.insertBefore(this._wrapper, this._input);
 
 		this._typeahead = document.createElement('input');
@@ -104,7 +114,16 @@ class AddressSearch{
 
         this._predictions = document.createElement('ul');
         this._predictions.classList.add('address-search-predictions');
-        this._wrapper.appendChild(this._predictions);
+		this._wrapper.appendChild(this._predictions);
+		
+		// Add lures to every component
+		Object.values(this._components).forEach(element => {
+			let lure = element.cloneNode(true);
+			lure.classList.add('address-search-lure');
+			lure.setAttribute('data-refer-to', this.uniqueId);
+
+			element.parentNode.insertBefore(lure, element);
+		});
     }
 
     /**
@@ -293,16 +312,11 @@ class AddressSearch{
                     this._input.value = place.formatted_address;
                     this._lure.value = this._input.value;
                     this._typeahead.value = '';
-    
-                    if(Object.keys(this._parameters).length !== 0){
-                        for(let prop in this._parameters){
-                            let target = document.querySelector(this._parameters[prop]);
-                            if(target){
-								target.value = prop.endsWith('_short') ? this._getPlaceComponent(prop.slice(0, -6), true) : this._getPlaceComponent(prop);
-								target.readOnly = !!target.value.length;
-							}
-                        }
-                    }
+	
+					Object.entries(this._components).forEach(([component, element]) => {
+						element.value = component.endsWith('_short') ? this._getPlaceComponent(component.slice(0, -6), true) : this._getPlaceComponent(component);
+						element.readOnly = !!element.value.length;
+					});
     
                     this._input.blur();
     
@@ -358,7 +372,7 @@ class AddressSearch{
      * @returns {AddressSearch}   The current {@link AddressSearch}
      */
     onSelect(callback){
-        this._onSelect.push(callback);
+		if(!this._errors.length) this._onSelect.push(callback);
         return this;
     }
 
@@ -367,7 +381,7 @@ class AddressSearch{
      * @returns {AddressSearch} The current {@link AddressSearch}
      */
     offSelect(){
-        this._onSelect = [];
+        if(!this._errors.length) this._onSelect = [];
         return this;
     }
 
@@ -386,7 +400,7 @@ class AddressSearch{
      * @returns {AddressSearch} The current {@link AddressSearch}
      */
     onPredict(callback){
-        this._onPredict.push(callback);
+        if(!this._errors.length) this._onPredict.push(callback);
         return this;
     }
 
@@ -395,7 +409,7 @@ class AddressSearch{
      * @returns {AddressSearch} The current {@link AddressSearch}
      */
     offPredict(){
-        this._onPredict = [];
+        if(!this._errors.length) this._onPredict = [];
         return this;
     }
 
@@ -405,21 +419,23 @@ class AddressSearch{
      * @param {Boolean} [triggerCallbacks=true] Should the method trigger the select callbacks?
      */
     setValue(value, triggerCallbacks = true){
-        if(typeof value === 'string'){
-            this._fetchPredictions.getPlacePredictions({ input: value }, (predictions, status) => {
-                if(status == google.maps.places.PlacesServiceStatus.OK){
-                    let prediction = predictions[0];
-                    this._select(prediction.place_id, triggerCallbacks);
-                }else{
-                    console.log(status);
-                }
-            });
-        }else{
-            this.value = value;
-            this._input.value = value.formatted_address;
-            this._lure.value = this._input.value;
-            this._typeahead.value = '';
-        }
+		if(!this._errors.length){
+			if(typeof value === 'string'){
+				this._fetchPredictions.getPlacePredictions({ input: value }, (predictions, status) => {
+					if(status == google.maps.places.PlacesServiceStatus.OK){
+						let prediction = predictions[0];
+						this._select(prediction.place_id, triggerCallbacks);
+					}else{
+						console.log(status);
+					}
+				});
+			}else{
+				this.value = value;
+				this._input.value = value.formatted_address;
+				this._lure.value = this._input.value;
+				this._typeahead.value = '';
+			}
+		}
     }
 
     /**
@@ -429,7 +445,11 @@ class AddressSearch{
      * @returns {Promise} - Resolves when the place has been set
      */
     setPlace(place_id, triggerCallbacks = true){
-        return this._select(place_id, triggerCallbacks);
+		if(!this._errors.length){
+			return this._select(place_id, triggerCallbacks);
+		}else{
+			return Promise.resolve();
+		}
     }
 
     /**
@@ -437,10 +457,13 @@ class AddressSearch{
      * @returns {AddressSearch} The current {@link AddressSearch}
      */
     reset(){
-        this.value = {};
-        this._input.value = '';
-        this._lure.value = '';
-        this._typeahead.value = '';
+		if(!this._errors.length){
+			this.value = {};
+			this._input.value = '';
+			this._lure.value = '';
+			this._typeahead.value = '';
+		}
+
         return this;
     }
 
@@ -449,9 +472,12 @@ class AddressSearch{
      * @returns {AddressSearch} The current {@link AddressSearch}
      */
     refreshService(){
-        this._fetchPredictions = new google.maps.places.AutocompleteService();
-        this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
-        this._economizer = {};
+		if(!this._errors.length){
+			this._fetchPredictions = new google.maps.places.AutocompleteService();
+			this._fetchPlace = new google.maps.places.PlacesService(document.createElement('div'));
+			this._economizer = {};
+		}
+
         return this;
     }
 
@@ -461,9 +487,12 @@ class AddressSearch{
      * @returns {AddressSearch} The current {@link AddressSearch}
      */
     useService(googleService){
-        this._fetchPredictions = googleService.maps.places.AutocompleteService();
-        this._fetchPlace = googleService.maps.places.PlacesService(document.createElement('div'));
-        this._economizer = {};
+		if(!this._errors.length){
+			this._fetchPredictions = googleService.maps.places.AutocompleteService();
+			this._fetchPlace = googleService.maps.places.PlacesService(document.createElement('div'));
+			this._economizer = {};
+		}
+        
         return this;
     }
 
@@ -471,16 +500,20 @@ class AddressSearch{
      * Removes any AddressSearch mutation from the DOM
      */
     destroy(){
-        if(this._lure.id) this._input.setAttribute('id',this._lure.id);
-        if(this._lure.getAttribute('name')) this._input.setAttribute('name',this._lure.getAttribute('name'));
-
-        this._input.parentNode.parentNode.insertBefore(this._input, this._wrapper);
-        this._wrapper.remove();
-        this._input.classList.remove('address-search-input');
-
-        //Remove event listeners
-        let cleanInput = this._input.cloneNode(true);
-        this._input.parentNode.replaceChild(cleanInput, this._input);
+		if(!this._errors.length){
+			if(this._lure.id) this._input.setAttribute('id',this._lure.id);
+			if(this._lure.getAttribute('name')) this._input.setAttribute('name',this._lure.getAttribute('name'));
+	
+			this._input.parentNode.parentNode.insertBefore(this._input, this._wrapper);
+			this._wrapper.remove();
+			this._input.classList.remove('address-search-input');
+			
+			document.querySelectorAll('.address-search-lure[data-refer-to="'+this.uniqueId+'"]').forEach(lure => lure.remove());
+	
+			//Remove event listeners
+			let cleanInput = this._input.cloneNode(true);
+			this._input.parentNode.replaceChild(cleanInput, this._input);
+		}
     }
 
     /**
@@ -490,14 +523,20 @@ class AddressSearch{
      */
     static destroy(selector){
         let lure = document.querySelector(selector);
-        let element = lure.parentNode.querySelector('.address-search-input');
+		let element = lure.parentNode.querySelector('.address-search-input');
+		
+		// Remove outside lures
+		let id = element.closest('.address-search[data-unique-id]').getAttribute('data-unique-id');
+		document.querySelectorAll('.address-search-lure[data-refer-to="'+id+'"]').forEach(lure => lure.remove());
         
         if(lure.id) element.setAttribute('id',lure.id);
         if(lure.getAttribute('name')) element.setAttribute('name',lure.getAttribute('name'));
         
         element.parentNode.parentNode.insertBefore(element, element.parentNode);
         element.nextElementSibling.remove();
-        element.classList.remove('address-search-input');
+		element.classList.remove('address-search-input');
+
+		
 
         //Remove event listeners
         let cleanInput = element.cloneNode(true);
