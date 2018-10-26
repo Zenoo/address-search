@@ -120,6 +120,7 @@ class AddressSearch{
 		Object.values(this._components).forEach(element => {
 			let lure = element.cloneNode(true);
 			lure.classList.add('address-search-lure');
+			lure.removeAttribute('id');
 			lure.setAttribute('data-refer-to', this.uniqueId);
 
 			element.parentNode.insertBefore(lure, element);
