@@ -121,6 +121,7 @@ class AddressSearch{
 			let lure = element.cloneNode(true);
 			lure.removeAttribute('id');
 			lure.removeAttribute('class');
+			lure.removeAttribute('name');
 			lure.classList.add('address-search-lure');
 			lure.setAttribute('data-refer-to', this.uniqueId);
 
