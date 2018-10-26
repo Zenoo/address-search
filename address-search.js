@@ -316,7 +316,7 @@ class AddressSearch{
 					Object.entries(this._components).forEach(([component, element]) => {
 						let value = component.endsWith('_short') ? this._getPlaceComponent(component.slice(0, -6), true) : this._getPlaceComponent(component);
 						element.value = value;
-						element.previousElement.value = value;
+						element.previousElementSibling.value = value;
 						element.readOnly = !!element.value.length;
 					});
     
