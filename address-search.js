@@ -314,7 +314,9 @@ class AddressSearch{
                     this._typeahead.value = '';
 	
 					Object.entries(this._components).forEach(([component, element]) => {
-						element.value = component.endsWith('_short') ? this._getPlaceComponent(component.slice(0, -6), true) : this._getPlaceComponent(component);
+						let value = component.endsWith('_short') ? this._getPlaceComponent(component.slice(0, -6), true) : this._getPlaceComponent(component);
+						element.value = value;
+						element.previousElement.value = value;
 						element.readOnly = !!element.value.length;
 					});
     
