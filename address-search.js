@@ -54,6 +54,8 @@ class AddressSearch{
 			this._onSelect = [];
 			/** @private */
 			this._onPredict = [];
+			/** @private */
+			this._onError = [];
 
 			/** @private */
 			this._parameters = parameters;
@@ -332,7 +334,8 @@ class AddressSearch{
 
                     resolve();
                 }else{
-                    console.log(status);
+					console.log(status);
+					for(let callback of this._onError) callback.call(this,status);
                     reject(status);
                 }
             });
@@ -416,6 +419,33 @@ class AddressSearch{
     offPredict(){
         if(!this._errors.length) this._onPredict = [];
         return this;
+	}
+	
+	/**
+     * Function called after an error.
+     * Using <code>this</code> inside it will return the current {@link AddressSearch}
+     *
+     * @callback onErrorCallback
+     * @param {Object} error The error
+     */
+
+    /**
+     * Adds a callback to be used when an error occurs
+     * @param {onErrorCallback} callback Function to call after an error
+     * @returns {AddressSearch}   The current {@link AddressSearch}
+     */
+    onError(callback){
+		if(!this._errors.length) this._onError.push(callback);
+        return this;
+    }
+
+    /**
+     * Removes every callback previously added with {@link AddressSearch#onError}
+     * @returns {AddressSearch} The current {@link AddressSearch}
+     */
+    offError(){
+        if(!this._errors.length) this._onError = [];
+        return this;
     }
 
     /**
@@ -432,6 +462,7 @@ class AddressSearch{
 						this._select(prediction.place_id, triggerCallbacks);
 					}else{
 						console.log(status);
+						for(let callback of this._onError) callback.call(this,status);
 					}
 				});
 			}else{
