@@ -72,7 +72,14 @@ class AddressSearch{
 
 			/** @private */
 			this._components = Object.entries(this._parameters).reduce((acc, [component, target]) => {
-				acc[component] = document.querySelector(target);
+				const targetElement = document.querySelector(target);
+
+				if(targetElement){
+					acc[component] = targetElement;
+				}else{
+					console.warn('The selector `'+target+'` didn\'t match any element.');
+				}
+
 				return acc;
 			}, {});
 
@@ -121,6 +128,7 @@ class AddressSearch{
 		// Add lures to every component
 		Object.values(this._components).forEach(element => {
 			let lure = element.cloneNode(true);
+
 			lure.removeAttribute('id');
 			lure.removeAttribute('class');
 			lure.removeAttribute('name');
@@ -320,6 +328,7 @@ class AddressSearch{
 	
 					Object.entries(this._components).forEach(([component, element]) => {
 						let value = component.endsWith('_short') ? this._getPlaceComponent(component.slice(0, -6), true) : this._getPlaceComponent(component);
+
 						element.value = value;
 						element.previousElementSibling.value = value;
 						element.readOnly = !!element.value.length;
@@ -558,24 +567,31 @@ class AddressSearch{
      * @static
      */
     static destroy(selector){
-        let lure = document.querySelector(selector);
-		let element = lure.parentNode.querySelector('.address-search-input');
+		let lure = document.querySelector(selector);
 		
-		// Remove outside lures
-		let id = element.closest('.address-search[data-unique-id]').getAttribute('data-unique-id');
-		document.querySelectorAll('.address-search-lure[data-refer-to="'+id+'"]').forEach(lure => lure.remove());
-        
-        if(lure.id) element.setAttribute('id',lure.id);
-        if(lure.getAttribute('name')) element.setAttribute('name',lure.getAttribute('name'));
-        
-        element.parentNode.parentNode.insertBefore(element, element.parentNode);
-        element.nextElementSibling.remove();
-		element.classList.remove('address-search-input');
+		// If it exists
+		if(lure){
+			let element = lure.nextElementSibling;
 
-		
+			// If it has been initialized as an AddressSearch
+			if(element && element.matches('.address-search-input')){
+				// Remove outside lures
+				let id = element.closest('.address-search[data-unique-id]').getAttribute('data-unique-id');
+				document.querySelectorAll('.address-search-lure[data-refer-to="'+id+'"]').forEach(lure => lure.remove());
+				
+				if(lure.id) element.setAttribute('id',lure.id);
+				if(lure.getAttribute('name')) element.setAttribute('name',lure.getAttribute('name'));
+				
+				element.parentNode.parentNode.insertBefore(element, element.parentNode);
+				element.nextElementSibling.remove();
+				element.classList.remove('address-search-input');
 
-        //Remove event listeners
-        let cleanInput = element.cloneNode(true);
-        element.parentNode.replaceChild(cleanInput, element);
+				
+
+				//Remove event listeners
+				let cleanInput = element.cloneNode(true);
+				element.parentNode.replaceChild(cleanInput, element);
+			}
+		}
     }
 }
