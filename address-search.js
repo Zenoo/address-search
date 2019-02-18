@@ -67,6 +67,9 @@ class AddressSearch{
 			/** @private */
 			this._timeout = null;
 
+			/** @private */
+			this._apiFields = ['address_component', 'adr_address', 'alt_id', 'formatted_address', 'geometry', 'icon', 'id', 'name', 'permanently_closed', 'photo', 'place_id', 'plus_code', 'scope', 'type', 'url', 'utc_offset', 'vicinity'];
+
 			/** @type {PlaceResult} */
 			this.value = {};
 
@@ -315,7 +318,7 @@ class AddressSearch{
      */
     _select(placeId, triggerCallbacks = true){
         return new Promise((resolve, reject) => {
-            this._fetchPlace.getDetails({placeId: placeId, sessiontoken: this._token}, (place, status) => {
+            this._fetchPlace.getDetails({placeId: placeId, fields: this._apiFields, sessiontoken: this._token}, (place, status) => {
                 if(status == google.maps.places.PlacesServiceStatus.OK){
 					this._generateToken();
                     this._togglePredictions('off');
@@ -539,6 +542,17 @@ class AddressSearch{
 		}
         
         return this;
+	}
+	
+	/**
+     * Manually set which fields should be returned by the Google Places API
+     * @param {String[]} fieldList List of field names
+     * @returns {AddressSearch} The current {@link AddressSearch}
+     */
+    setFields(fieldList){
+		this._apiFields = fieldList;
+
+		return this;
     }
 
     /**
