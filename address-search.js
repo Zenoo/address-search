@@ -108,6 +108,7 @@ class AddressSearch{
 
 		this._typeahead = document.createElement('input');
 		this._typeahead.setAttribute('class', this._input.getAttribute('class'));
+		this._typeahead.setAttribute('tabindex', -1);
         this._typeahead.classList.add('address-search-typeahead');
         
         let typeaheadLure = this._typeahead.cloneNode(true);
@@ -117,6 +118,7 @@ class AddressSearch{
         this._wrapper.appendChild(this._typeahead);
 
         this._lure.classList.add('address-search-lure');
+		this._lure.setAttribute('tabindex', -1);
         this._wrapper.appendChild(this._lure);
 
         this._input.classList.add('address-search-input');
@@ -137,6 +139,7 @@ class AddressSearch{
 			lure.removeAttribute('name');
 			lure.classList.add('address-search-lure');
 			lure.setAttribute('data-refer-to', this.uniqueId);
+			lure.setAttribute('tabindex', -1);
 
 			element.parentNode.insertBefore(lure, element);
 		});
