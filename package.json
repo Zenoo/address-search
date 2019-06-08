@@ -12,6 +12,7 @@
     "typeahead"
   ],
   "version": "1.11.0",
+  "main": "address-search.js",
   "author": {
     "name": "Zenoo",
     "url": "https://github.com/Zenoo"
