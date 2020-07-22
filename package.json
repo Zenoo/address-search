@@ -11,7 +11,10 @@
     "input",
     "typeahead"
   ],
-  "version": "1.11.1",
+  "scripts": {
+    "release": "standard-version"
+  },
+  "version": "1.11.2",
   "main": "address-search.js",
   "author": {
     "name": "Zenoo",
@@ -33,5 +36,48 @@
   "homepage": "https://github.com/Zenoo/address-search",
   "docs": "https://github.com/Zenoo/address-search#readme",
   "download": "https://github.com/Zenoo/address-search/archive/master.zip",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "standard-version": "^8.0.2"
+  },
+  "standard-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes"
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      },
+      {
+        "type": "docs",
+        "section": "Documentation"
+      },
+      {
+        "type": "style",
+        "section": "Visual updates"
+      },
+      {
+        "type": "refactor",
+        "section": "Refactoring"
+      },
+      {
+        "type": "perf",
+        "section": "Performance"
+      },
+      {
+        "type": "progress",
+        "section": "Progress"
+      },
+      {
+        "type": "test",
+        "section": "Tests"
+      }
+    ]
+  }
 }
