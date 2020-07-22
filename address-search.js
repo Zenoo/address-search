@@ -68,7 +68,7 @@ class AddressSearch{
 			this._timeout = null;
 
 			/** @private */
-			this._apiFields = ['address_component', 'adr_address', 'alt_id', 'formatted_address', 'geometry', 'icon', 'id', 'name', 'permanently_closed', 'photo', 'place_id', 'plus_code', 'scope', 'type', 'url', 'utc_offset', 'vicinity'];
+			this._apiFields = ['address_component', 'adr_address', 'alt_id', 'formatted_address', 'geometry', 'icon', 'id', 'name', 'business_status', 'photo', 'place_id', 'plus_code', 'scope', 'type', 'url', 'utc_offset_minutes', 'vicinity'];
 
 			/** @type {PlaceResult} */
 			this.value = {};
