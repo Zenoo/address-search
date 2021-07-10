@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://github.com/Zenoo/address-search/compare/v1.12.0...v1.12.1) (2021-07-10)
+
+
+### Bug Fixes
+
+* Remove comments from .min.js ([479cb6b](https://github.com/Zenoo/address-search/commit/479cb6bb6bfb99c777759aa5794baed23d1e4136))
+
 ## [1.12.0](https://github.com/Zenoo/address-search/compare/v1.11.2...v1.12.0) (2021-07-10)
 
 
