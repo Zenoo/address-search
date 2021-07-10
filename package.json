@@ -15,7 +15,7 @@
     "compile": "babel address-search.js -o address-search-ie.min.js && browserify address-search-ie.min.js | uglifyjs > address-search.min.js && rm address-search-ie.min.js && jsdoc . -R README.md -c docs/jsdoc-conf.json",
     "release": "npm run compile && git add address-search.min.js && git diff-index --quiet HEAD || git commit -m \"Minification\" && standard-version"
   },
-  "version": "1.12.3",
+  "version": "1.12.4",
   "main": "address-search.js",
   "author": {
     "name": "Zenoo",

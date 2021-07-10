@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.4](https://github.com/Zenoo/address-search/compare/v1.12.3...v1.12.4) (2021-07-10)
+
+
+### Bug Fixes
+
+* Compilation ([3b238db](https://github.com/Zenoo/address-search/commit/3b238db4bd1e5c6599339e2abbe748ebf92f49f6))
+* Wrong corejs package ([4bf7666](https://github.com/Zenoo/address-search/commit/4bf766654a74aa21db369c44f6002fff8167f2dc))
+
 ### [1.12.3](https://github.com/Zenoo/address-search/compare/v1.12.2...v1.12.3) (2021-07-10)
 
 
