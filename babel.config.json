@@ -3,11 +3,11 @@
     [
       "@babel/preset-env",
       {
-        "useBuiltIns": "entry",
+        "useBuiltIns": "usage",
         "corejs": 2
       }
-    ],
-    "minify"
+    ]
   ],
+  "minified": true,
   "comments": false
 }

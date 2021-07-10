@@ -12,7 +12,8 @@
     "typeahead"
   ],
   "scripts": {
-    "release": "babel address-search.js -o address-search.min.js && git add address-search.min.js && git diff-index --quiet HEAD || git commit -m \"Minification\" && standard-version"
+    "compile": "babel address-search.js -o address-search.min.js",
+    "release": "npm run compile && git add address-search.min.js && git diff-index --quiet HEAD || git commit -m \"Minification\" && standard-version"
   },
   "version": "1.12.2",
   "main": "address-search.js",
