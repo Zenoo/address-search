@@ -14,7 +14,7 @@
   "scripts": {
     "release": "standard-version"
   },
-  "version": "1.12.4",
+  "version": "1.12.5",
   "main": "address-search.js",
   "author": {
     "name": "Zenoo",

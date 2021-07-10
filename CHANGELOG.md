@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.5](https://github.com/Zenoo/address-search/compare/v1.12.4...v1.12.5) (2021-07-10)
+
+
+### Bug Fixes
+
+* Revert babel ([17abb96](https://github.com/Zenoo/address-search/commit/17abb9685ac30350c9a8dd028c95104c35e3b397))
+
 ### [1.12.4](https://github.com/Zenoo/address-search/compare/v1.12.3...v1.12.4) (2021-07-10)
 
 
