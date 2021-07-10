@@ -1,0 +1,18 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ],
+    [
+      "minify",
+      {
+        "mangle": false
+      }
+    ]
+  ],
+  "comments": false
+}
