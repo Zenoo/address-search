@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/Zenoo/address-search/compare/v1.11.2...v1.12.0) (2021-07-10)
+
+
+### Features
+
+* New workflows ([31e12a8](https://github.com/Zenoo/address-search/commit/31e12a81891e1d244d28d8106d9de55dbc3973a0))
+
 ### [1.11.2](https://github.com/Zenoo/address-search/compare/v1.11.1...v1.11.2) (2020-07-22)
 
 

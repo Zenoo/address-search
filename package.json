@@ -14,7 +14,7 @@
   "scripts": {
     "release": "babel address-search.js -o address-search.min.js && git add address-search.min.js && git diff-index --quiet HEAD || git commit -m \"Minification\" && standard-version"
   },
-  "version": "1.11.2",
+  "version": "1.12.0",
   "main": "address-search.js",
   "author": {
     "name": "Zenoo",
