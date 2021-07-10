@@ -15,7 +15,7 @@
     "build": "babel address-search.js -o address-search.min.js && jsdoc . -R README.md -c docs/jsdoc-conf.json && git add -A . && git commit -m 'chore: Docs generation'",
     "release": "npm run build && standard-version"
   },
-  "version": "1.12.5",
+  "version": "1.12.6",
   "main": "address-search.js",
   "author": {
     "name": "Zenoo",
