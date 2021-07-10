@@ -8,5 +8,6 @@
       }
     ],
     "minify"
-  ]
+  ],
+  "comments": false
 }
