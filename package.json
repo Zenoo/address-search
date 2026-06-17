@@ -37,9 +37,9 @@
   "docs": "https://github.com/Zenoo/address-search#readme",
   "download": "https://github.com/Zenoo/address-search/archive/master.zip",
   "devDependencies": {
-    "@babel/cli": "^7.26.4",
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
+    "@babel/cli": "^8.0.0",
+    "@babel/core": "^8.0.0",
+    "@babel/preset-env": "^8.0.0",
     "babel-preset-minify": "^0.5.2",
     "jsdoc": "^4.0.4"
   }
